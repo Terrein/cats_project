@@ -1,10 +1,12 @@
 
 const boxForCards = document.querySelector('main')
+
+
 const addCardscats = () =>
     cats.forEach(cat => {
         const card = document.createElement('div')
-        card.className = `${cat.favourite ? 'card like' : 'card'}`
-        card.innerHTML = ` <span>${cat.name}</span>`
+        card.className = `${cat.favourite ? 'card like' : 'card disLike'}`
+        card.innerHTML = `<span>${cat.name}</span>`
         boxForCards.appendChild(card)
         const width = card.offsetWidth
         card.style.height = width * 0.6 + "px";
