@@ -1,18 +1,19 @@
 
 const boxForCards = document.querySelector('main')
 
+const addCard = (cat) => {
+    const card = document.createElement('div')
+    card.className = `${cat.favourite ? 'card like' : 'card disLike'}`
+    card.innerHTML = `<span>${cat.name}</span>`
+    boxForCards.appendChild(card)
+    const width = card.offsetWidth
+    card.style.height = width * 0.6 + "px";
+    card.style.backgroundImage = `url(${cat.img_link})`
+}
 
-const addCardscats = () =>
-    cats.forEach(cat => {
-        const card = document.createElement('div')
-        card.className = `${cat.favourite ? 'card like' : 'card disLike'}`
-        card.innerHTML = `<span>${cat.name}</span>`
-        boxForCards.appendChild(card)
-        const width = card.offsetWidth
-        card.style.height = width * 0.6 + "px";
-        card.style.backgroundImage = `url(${cat.img_link})`
-    })
-addCardscats()
+const rednerCards = () => cats.forEach(addCard)
+
+rednerCards()
 
 let addBtn = document.querySelector("#add");
 let popupForm = document.querySelector("#popup-form");
@@ -49,10 +50,9 @@ const getFormValue = (event) => {
         "id": id.value
     }
     cats.push(data)
-    addCardscats()
+    addCard(data)
     popupForm.classList.remove("active");
     popupForm.parentElement.classList.remove("active");
+    form.reset()
 }
 form.addEventListener('submit', getFormValue)
-
-
