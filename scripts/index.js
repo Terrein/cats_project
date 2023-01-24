@@ -11,9 +11,9 @@ const addCard = (cat) => {
     card.style.backgroundImage = `url(${cat.img_link})`
 }
 
-const rendnerCards = () => cats.forEach(addCard)
+const renderCards = () => cats.forEach(addCard)
 
-rendnerCards()
+renderCards()
 
 let addBtn = document.querySelector("#add");
 let popupForm = document.querySelector("#popup-form");
