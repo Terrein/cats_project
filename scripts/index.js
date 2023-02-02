@@ -26,10 +26,10 @@ const getCat = async (api) => {
         const response = await reqType.json()
         if (response.message === 'ok') {
             const cats = await response.data
-            // if (localStorage.length === 0) {
-            //     renderCards(cats)
-            //     localStorage.setItem("cats", JSON.stringify(cats))
-            // }
+            if (localStorage.length === 0) {
+                renderCards(cats)
+                localStorage.setItem("cats", JSON.stringify(cats))
+            }
             // localStorage.removeItem('cats')
             localStorage.setItem("cats", JSON.stringify(cats))
         }
@@ -194,11 +194,11 @@ const catchInfo = (event) => {
     }
     updCat(activeIndex, newInf).then(res => {
         if (res.message === 'ok') {
-            localStorage.setItem("cats", JSON.stringify(catsArr))
+            newCatArr = modifyObj(catsArr, activeIndex, newInf)
+            localStorage.setItem("cats", JSON.stringify(newCatArr))
             detInfoForm.classList.remove("active");
             detInfoForm.parentElement.classList.remove("active");
             window.location.reload(true)
-
         } else {
             alert("не удалось загрузить")
         }
@@ -220,14 +220,13 @@ function serializeForm(formNode) {
     })
     return objToSend
 }
-const newInf = serializeForm(showInfo)
-catsArr.forEach((el) => {
-    console.log(el.id === newInf.id)
-    // for (let i in el) {
-    //     for (let a in newInf) {
-    //         console.log(i.id)
-    //     }
-    // }
-})
 
 changeButton.addEventListener('click', catchInfo)
+
+function modifyObj(catsArr, activeIndex, modObj) {
+    return catsArr.map(element => {
+        if (element.id === activeIndex) {
+            return { ...element, ...modObj }
+        } return element
+    })
+}
