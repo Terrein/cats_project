@@ -1,22 +1,21 @@
-// window.onload = () => {
-//     localStorage.removeItem('cats')
-// }
 
 const boxForCards = document.querySelector('main');
 
-let addBtn = document.querySelector("#add");
-let popupForm = document.querySelector("#popup-form");
-let closePopupForm = popupForm.querySelector(".popup-close");
-let enterBtn = document.querySelector("#enter");
-let authorizForm = document.querySelector("#authoriz-form");
-let closeAuthorizForm = authorizForm.querySelector(".authoriz-close");
-let detInfoForm = document.querySelector("#det_info-form");
-let closeDetInfoForm = detInfoForm.querySelector(".det_info-close");
+const addBtn = document.querySelector("#add");
+const popupForm = document.querySelector("#popup-form");
+const closePopupForm = popupForm.querySelector(".popup-close");
+const enterBtn = document.querySelector("#enter");
+const authorizForm = document.querySelector("#authoriz-form");
+const closeAuthorizForm = authorizForm.querySelector(".authoriz-close");
+const detInfoForm = document.querySelector("#det_info-form");
+const closeDetInfoForm = detInfoForm.querySelector(".det_info-close");
 const enterForm = document.querySelector('.authorizForm');
 const delButton = document.querySelector('.del')
 const changeButton = document.querySelector('.change')
 const showInfo = document.querySelector('.show-info')
 const form = document.querySelector('.add_pet');
+let activeIndex
+let activeName
 
 const api = new Api("aliev_ernest");
 
@@ -30,7 +29,6 @@ const getCat = async (api) => {
                 renderCards(cats)
                 localStorage.setItem("cats", JSON.stringify(cats))
             }
-            // localStorage.removeItem('cats')
             localStorage.setItem("cats", JSON.stringify(cats))
         }
     } catch (err) {
@@ -40,8 +38,30 @@ const getCat = async (api) => {
 getCat(api)
 
 let catsArr = (localStorage.getItem('cats') && JSON.parse(localStorage.getItem('cats'))) || []
-let activeIndex
-let activeName
+
+function serializeForm(formNode) {
+    const objToSend = {}
+    const formControl = formNode.elements
+    const formArr = Array.from(formControl)
+    formArr.forEach((el) => {
+        if (el.tagName.toLowerCase() === 'input' || el.tagName.toLowerCase() === 'textarea') {
+            if (el.value !== '' && el.type !== 'checkbox') {
+                objToSend[el.name] = el.value
+            } else if (el.value !== '' && el.type === 'checkbox') {
+                objToSend[el.name] = el.checked
+            }
+        }
+    })
+    return objToSend
+}
+
+function modifyObj(catsArr, activeIndex, modObj) {
+    return catsArr.map(element => {
+        if (element.id === activeIndex) {
+            return { ...element, ...modObj }
+        } return element
+    })
+}
 
 function addCard(cat) {
     const card = document.createElement('div')
@@ -112,7 +132,7 @@ const getFormValue = (event) => {
         const response = await reqType.json()
         return response
     }
-    if (document.cookie.indexOf('Login') != -1) {
+    if (document.cookie.indexOf('Login') !== -1) {
         addCat(data).then(res => {
             if (res.message === 'ok') {
                 catsArr.push(data)
@@ -129,7 +149,7 @@ const getFormValue = (event) => {
         alert('Для выполнения действий авторизируйтесь')
     }
 }
-console.log(document.cookie.indexOf('Login') != -1);
+
 form.addEventListener('submit', getFormValue)
 
 
@@ -159,7 +179,6 @@ enterForm.addEventListener('submit', getValueAuthorizationForm)
 
 const delCats = (event) => {
     event.preventDefault()
-
     let answer = confirm(`Вы уверены что хотите удалить котика ${activeName}?`)
     if (answer) {
         const delCat = async (id) => {
@@ -204,29 +223,4 @@ const catchInfo = (event) => {
         }
     })
 }
-
-function serializeForm(formNode) {
-    const objToSend = {}
-    const formControl = formNode.elements
-    const formArr = Array.from(formControl)
-    formArr.forEach((el) => {
-        if (el.tagName.toLowerCase() === 'input' || el.tagName.toLowerCase() === 'textarea') {
-            if (el.value != '' && el.type != 'checkbox') {
-                objToSend[el.name] = el.value
-            } else if (el.value != '' && el.type === 'checkbox') {
-                objToSend[el.name] = el.checked
-            }
-        }
-    })
-    return objToSend
-}
-
 changeButton.addEventListener('click', catchInfo)
-
-function modifyObj(catsArr, activeIndex, modObj) {
-    return catsArr.map(element => {
-        if (element.id === activeIndex) {
-            return { ...element, ...modObj }
-        } return element
-    })
-}
