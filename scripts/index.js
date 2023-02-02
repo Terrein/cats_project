@@ -1,4 +1,3 @@
-
 const boxForCards = document.querySelector('main');
 
 const addBtn = document.querySelector("#add");
@@ -58,8 +57,12 @@ function serializeForm(formNode) {
 function modifyObj(catsArr, activeIndex, modObj) {
     return catsArr.map(element => {
         if (element.id === activeIndex) {
-            return { ...element, ...modObj }
-        } return element
+            return {
+                ...element,
+                ...modObj
+            }
+        }
+        return element
     })
 }
 
